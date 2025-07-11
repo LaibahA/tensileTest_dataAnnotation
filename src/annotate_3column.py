@@ -26,8 +26,8 @@ with open("../data/example_3column.csv") as f:
         g.add((test_uri, TTO.hasTestPiece, Literal(row["TestPiece"]))) # eg: T1 has test piece specimenA
         # It says: test_uri (subject), has a test piece (predicate), specified test piece (object)
 
-g.serialize("../output/3column_turtle.ttl", format="turtle")
-g.serialize("../output/3column_jsonld.jsonld", format="json-ld")
+g.serialize("../output/3column/turtle_output.ttl", format="turtle")
+g.serialize("../output/3column/jsonld_output.jsonld", format="json-ld")
 
 
 

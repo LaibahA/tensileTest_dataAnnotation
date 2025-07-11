@@ -1,5 +1,5 @@
-from rdflib import Graph, Namespace, URIRef, Literal
-# Graph stores the RDF triples, Namespace is what lets us define the prefixes, URIRef is what we use to make the URIs, Literal is in case we have nums/strings
+from rdflib import Graph, Namespace,Literal
+# Graph stores the RDF triples, Namespace is what lets us define the prefixes, Literal is in case we have nums/strings
 from rdflib.namespace import RDF
 # RDF is for the standard datatypes
 import csv
@@ -26,8 +26,8 @@ with open("../data/example_3column.csv") as f:
         g.add((test_uri, TTO.hasTestPiece, Literal(row["TestPiece"]))) # eg: T1 has test piece specimenA
         # It says: test_uri (subject), has a test piece (predicate), specified test piece (object)
 
-g.serialize("../output/3column/turtle_output.ttl", format="turtle")
-g.serialize("../output/3column/jsonld_output.jsonld", format="json-ld")
+g.serialize("../output/3column/csv_input_turtle_output.ttl", format="turtle")
+g.serialize("../output/3column/csv_input_jsonld_output.jsonld", format="json-ld")
 
 
 

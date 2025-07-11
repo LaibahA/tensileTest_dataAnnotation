@@ -1,5 +1,5 @@
-from rdflib import Graph, Namespace, URIRef, Literal
-# Graph stores the RDF triples, Namespace is what lets us define the prefixes, URIRef is what we use to make the URIs, Literal is in case we have nums/strings
+from rdflib import Graph, Namespace, Literal
+# Graph stores the RDF triples, Namespace is what lets us define the prefixes, Literal is in case we have nums/strings
 from rdflib.namespace import RDF, XSD
 # RDF is for the standard datatypes, XSD is so the values we write serialize how we want. see usage for gauge length example
 import csv
@@ -34,8 +34,8 @@ with open("../data/example_5column.csv") as f:
         g.add((test_piece_uri, TTO.hasThickness, Literal(row["OriginalThickness"], datatype=XSD.integer))) # eg: T1 has original thickness 3
         # It says: test_piece_uri (subject), has a thickness (predicate), specified original thickness (object)
 
-g.serialize("../output/5column/turtle_output.ttl", format="turtle")
-g.serialize("../output/5column/jsonld_output.jsonld", format="json-ld")
+g.serialize("../output/5column/csv_input_turtle_output.ttl", format="turtle")
+g.serialize("../output/5column/csv_input_jsonld_output.jsonld", format="json-ld")
 
 
 

@@ -1,0 +1,11 @@
+@prefix ex: <http://example.org/tensile/> .
+@prefix tto: <https://materialdigital.github.io/application-ontologies/tto/#/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:T1 a tto:TensileTest ;
+    tto:hasGaugeLength "50"^^xsd:float ;
+    tto:hasTestPiece ex:SpecimenA ;
+    tto:hasTestingMachine ex:machineA .
+
+ex:SpecimenA tto:hasOriginalThickness "3"^^xsd:float .
+

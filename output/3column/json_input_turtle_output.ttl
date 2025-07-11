@@ -1,0 +1,7 @@
+@prefix ex: <http://example.org/tensile/> .
+@prefix tto: <https://materialdigital.github.io/application-ontologies/tto/#/> .
+
+ex:T1 a tto:TensileTest ;
+    tto:hasTestPiece ex:SpecimenA ;
+    tto:hasTestingMachine ex:machineA .
+

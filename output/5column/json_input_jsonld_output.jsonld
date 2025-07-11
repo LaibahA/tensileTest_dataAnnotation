@@ -1,0 +1,33 @@
+[
+  {
+    "@id": "http://example.org/tensile/SpecimenA",
+    "https://materialdigital.github.io/application-ontologies/tto/#/hasOriginalThickness": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#float",
+        "@value": "3"
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/tensile/T1",
+    "@type": [
+      "https://materialdigital.github.io/application-ontologies/tto/#/TensileTest"
+    ],
+    "https://materialdigital.github.io/application-ontologies/tto/#/hasGaugeLength": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#float",
+        "@value": "50"
+      }
+    ],
+    "https://materialdigital.github.io/application-ontologies/tto/#/hasTestPiece": [
+      {
+        "@id": "http://example.org/tensile/SpecimenA"
+      }
+    ],
+    "https://materialdigital.github.io/application-ontologies/tto/#/hasTestingMachine": [
+      {
+        "@id": "http://example.org/tensile/machineA"
+      }
+    ]
+  }
+]

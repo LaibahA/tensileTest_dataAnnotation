@@ -1,0 +1,18 @@
+[
+  {
+    "@id": "http://example.org/tensile/T1",
+    "@type": [
+      "https://materialdigital.github.io/application-ontologies/tto/#/TensileTest"
+    ],
+    "https://materialdigital.github.io/application-ontologies/tto/#/hasTestPiece": [
+      {
+        "@id": "http://example.org/tensile/SpecimenA"
+      }
+    ],
+    "https://materialdigital.github.io/application-ontologies/tto/#/hasTestingMachine": [
+      {
+        "@id": "http://example.org/tensile/machineA"
+      }
+    ]
+  }
+]

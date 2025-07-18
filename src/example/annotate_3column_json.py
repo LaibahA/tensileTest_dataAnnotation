@@ -12,7 +12,7 @@ g.bind("tto", TTO) # Binding namespace to prefix, makes it easier to use
 EX = Namespace("http://example.org/tensile/") # This is an example, its gna be what builds the uri for our subject to annotate
 g.bind("ex", EX)
 
-with open("../data/example_3column.json") as f:
+with open("../../data/example/example_3column.json") as f:
     reader = json.load(f) # Makes the list of rows
 
 for row in reader:
@@ -24,5 +24,5 @@ for row in reader:
     g.add((test_uri, TTO.hasTestPiece, test_piece_uri)) # This says : test_uri (subject), has test piece (predicate), specific test piece (eg specimenA, object)
     g.add((test_uri, TTO.hasTestingMachine, machine_uri)) # This says : test_uri (subject), has testing machine (predicate), machine_uri (eg machineA, object)
 
-g.serialize("../output/3column/json_input_turtle_output.ttl", format="turtle")
-g.serialize("../output/3column/json_input_jsonld_output.jsonld", format="json-ld")
+g.serialize("../output/example/3column/json_input_turtle_output.ttl", format="turtle")
+g.serialize("../output/example/3column/json_input_jsonld_output.jsonld", format="json-ld")

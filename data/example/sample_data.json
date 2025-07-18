@@ -1,0 +1,24 @@
+{
+    "sample_id": "groupX_test_0",
+    "width": 6.0,
+    "thickness": 4.5,
+    "length": 50.0,
+    "data": [
+        {
+            "mm": 0.0,
+            "N": 0.13373904
+        },
+        {
+            "mm": 0.0,
+            "N": 0.13373904
+        },
+        {
+            "mm": 0.00010157537,
+            "N": 0.06686952
+        }
+      ],
+    "extracted_properties": {
+        "youngs_modulus": 793.7927659629179,
+        "ultimate_tensile_strength": 48.01455925925926
+    }
+}

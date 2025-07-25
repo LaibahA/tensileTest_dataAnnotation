@@ -1,3 +1,4 @@
 rdflib
 os
 json
+notebook

@@ -22,9 +22,6 @@ for filename in os.listdir(input_dir):
             "https://webprotege.stanford.edu/#projects/bbc9ebd0-8a7b-49f3-aedf-36cb71ee8a37/edit/Classes/")  #Here we are just saying that NTTO is the namespace for our ontology
         g.bind("ntto", NTTO)  #Binding namespace to prefix, makes it easier to use
 
-        QUDT = Namespace("http://qudt.org/schema/qudt/")
-        g.bind("qudt", QUDT)
-
         '''
         Need to update namespace below to our domain
         '''
@@ -100,7 +97,7 @@ for filename in os.listdir(input_dir):
                 g.add((measured_data_node, NTTO.hasElongation, elong_node))
 
                 #Link data points to test piece
-                g.add((test_piece, NTTO.hasMeasurment, measured_data_node))
+                g.add((test_piece, NTTO.hasMeasurement, measured_data_node))
 
             output_base_jsonld = os.path.join(output_dir_jsonld, f"annotated_{sample_id}")
             output_base_ttl = os.path.join(output_dir_ttl, f"annotated_{sample_id}")

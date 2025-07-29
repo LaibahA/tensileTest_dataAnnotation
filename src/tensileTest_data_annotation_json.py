@@ -7,8 +7,8 @@ from rdflib.namespace import RDF, XSD
 
 #Input and output directories
 input_dir = "../data/FAIRtrain_data_json"
-output_dir_jsonld = "../output/FAIRtrain/jsonld_output"
-output_dir_ttl ="../output/FAIRtrain/ttl_output"
+output_dir_jsonld = "../output/annotatedBy_TTO/jsonld_output"
+output_dir_ttl = "../output/annotatedBy_TTO/ttl_output"
 
 #Loop through each JSON file in the input directory
 for filename in os.listdir(input_dir):

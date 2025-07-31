@@ -1,0 +1,63 @@
+@prefix ex: <http://example.org/tensile/> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix tto: <https://materialdigital.github.io/application-ontologies/tto/#/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:groupX_test_0 a tto:TensileTest ;
+    tto:relatesTo ex:groupX,
+        ex:testPiece_0 .
+
+ex:length a tto:OriginalGaugeLength ;
+    qudt:numericValue "50.0"^^xsd:float ;
+    tto:relatesTo ex:testPiece_0 .
+
+ex:thickness a tto:OriginalThickness ;
+    qudt:numericValue "4.5"^^xsd:float ;
+    tto:relatesTo ex:testPiece_0 .
+
+ex:ultimate_tensile_strength a tto:UpperYieldStrength ;
+    qudt:numericValue "48.01455925925926"^^xsd:float ;
+    tto:relatesTo ex:testPiece_0 .
+
+ex:width a tto:OriginalWidth ;
+    qudt:numericValue "6.0"^^xsd:float ;
+    tto:relatesTo ex:testPiece_0 .
+
+ex:youngs_modulus a tto:SlopeOfTheElasticPart ;
+    qudt:numericValue "793.7927659629179"^^xsd:float ;
+    tto:relatesTo ex:testPiece_0 .
+
+ex:groupX a tto:TensileTestingMachine .
+
+ex:pair_0_elongation a tto:Elongation ;
+    qudt:numericValue "0.0"^^xsd:float ;
+    tto:relatesTo ex:pair_0_force,
+        ex:testPiece_0 .
+
+ex:pair_0_force a tto:Force ;
+    qudt:numericValue "0.13373904"^^xsd:float ;
+    tto:relatesTo ex:pair_0_elongation,
+        ex:testPiece_0 .
+
+ex:pair_1_elongation a tto:Elongation ;
+    qudt:numericValue "0.0"^^xsd:float ;
+    tto:relatesTo ex:pair_1_force,
+        ex:testPiece_0 .
+
+ex:pair_1_force a tto:Force ;
+    qudt:numericValue "0.13373904"^^xsd:float ;
+    tto:relatesTo ex:pair_1_elongation,
+        ex:testPiece_0 .
+
+ex:pair_2_elongation a tto:Elongation ;
+    qudt:numericValue "0.00010157537"^^xsd:float ;
+    tto:relatesTo ex:pair_2_force,
+        ex:testPiece_0 .
+
+ex:pair_2_force a tto:Force ;
+    qudt:numericValue "0.06686952"^^xsd:float ;
+    tto:relatesTo ex:pair_2_elongation,
+        ex:testPiece_0 .
+
+ex:testPiece_0 a tto:TestPiece .
+

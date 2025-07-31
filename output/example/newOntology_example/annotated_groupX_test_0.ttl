@@ -1,0 +1,70 @@
+@prefix ex: <http://example.org/tensile/> .
+@prefix ntto: <https://webprotege.stanford.edu/#projects/bbc9ebd0-8a7b-49f3-aedf-36cb71ee8a37/edit/Classes/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:groupX a ntto:Machine .
+
+ex:testPiece_0 a ntto:Sample ;
+    ntto:hasLength ex:groupX_test_0_length ;
+    ntto:hasMeasurement ex:groupX_test_0_measured_data_0,
+        ex:groupX_test_0_measured_data_1,
+        ex:groupX_test_0_measured_data_2 ;
+    ntto:hasThickness ex:groupX_test_0_thickness ;
+    ntto:hasUTS ex:groupX_test_0_ultimate_tensile_strength ;
+    ntto:hasWidth ex:groupX_test_0_width ;
+    ntto:hasYoungsModulus ex:groupX_test_0_youngs_modulus .
+
+ex:groupX_test_0_elongation_0 a ntto:Elongation ;
+    ntto:hasUnitLabel "mm" ;
+    ntto:hasValue "0.0"^^xsd:float .
+
+ex:groupX_test_0_elongation_1 a ntto:Elongation ;
+    ntto:hasUnitLabel "mm" ;
+    ntto:hasValue "0.0"^^xsd:float .
+
+ex:groupX_test_0_elongation_2 a ntto:Elongation ;
+    ntto:hasUnitLabel "mm" ;
+    ntto:hasValue "0.00010157537"^^xsd:float .
+
+ex:groupX_test_0_force_0 a ntto:Force ;
+    ntto:hasUnitLabel "N" ;
+    ntto:hasValue "0.13373904"^^xsd:float .
+
+ex:groupX_test_0_force_1 a ntto:Force ;
+    ntto:hasUnitLabel "N" ;
+    ntto:hasValue "0.13373904"^^xsd:float .
+
+ex:groupX_test_0_force_2 a ntto:Force ;
+    ntto:hasUnitLabel "N" ;
+    ntto:hasValue "0.06686952"^^xsd:float .
+
+ex:groupX_test_0_length a ntto:OriginalGaugeLength ;
+    ntto:hasUnitLabel "mm" ;
+    ntto:hasValue "50.0"^^xsd:float .
+
+ex:groupX_test_0_measured_data_0 a ntto:MeasuredData ;
+    ntto:hasElongation ex:groupX_test_0_elongation_0 ;
+    ntto:hasForce ex:groupX_test_0_force_0 .
+
+ex:groupX_test_0_measured_data_1 a ntto:MeasuredData ;
+    ntto:hasElongation ex:groupX_test_0_elongation_1 ;
+    ntto:hasForce ex:groupX_test_0_force_1 .
+
+ex:groupX_test_0_measured_data_2 a ntto:MeasuredData ;
+    ntto:hasElongation ex:groupX_test_0_elongation_2 ;
+    ntto:hasForce ex:groupX_test_0_force_2 .
+
+ex:groupX_test_0_thickness a ntto:OriginalThickness ;
+    ntto:hasUnitLabel "mm" ;
+    ntto:hasValue "4.5"^^xsd:float .
+
+ex:groupX_test_0_ultimate_tensile_strength a ntto:UpperYieldStrength ;
+    ntto:hasValue "48.01455925925926"^^xsd:float .
+
+ex:groupX_test_0_width a ntto:OriginalWidth ;
+    ntto:hasUnitLabel "mm" ;
+    ntto:hasValue "6.0"^^xsd:float .
+
+ex:groupX_test_0_youngs_modulus a ntto:SlopeOfTheElasticPart ;
+    ntto:hasValue "793.7927659629179"^^xsd:float .
+

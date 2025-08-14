@@ -1,0 +1,68 @@
+@prefix ex: <http://example.org/tensile/> .
+@prefix tto: <https://materialdigital.github.io/application-ontologies/tto/#/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:groupX_test_0 a tto:TensileTest ;
+    tto:BFO_0000057 ex:groupX,
+        ex:testPiece_0 .
+
+ex:length a tto:OriginalGaugeLength ;
+    tto:IAO_0000221 ex:testPiece_0 ;
+    tto:PMD_0000006 "50.0"^^xsd:float ;
+    tto:PMD_0000020 "mm" .
+
+ex:pair_0_force a tto:Force ;
+    tto:BFO_0000195 ex:pair_0_elongation ;
+    tto:IAO_0000221 ex:testPiece_0 ;
+    tto:PMD_0000006 "0.13373904"^^xsd:float ;
+    tto:PMD_0000020 "N" .
+
+ex:pair_1_force a tto:Force ;
+    tto:BFO_0000195 ex:pair_1_elongation ;
+    tto:IAO_0000221 ex:testPiece_0 ;
+    tto:PMD_0000006 "0.13373904"^^xsd:float ;
+    tto:PMD_0000020 "N" .
+
+ex:pair_2_force a tto:Force ;
+    tto:BFO_0000195 ex:pair_2_elongation ;
+    tto:IAO_0000221 ex:testPiece_0 ;
+    tto:PMD_0000006 "0.06686952"^^xsd:float ;
+    tto:PMD_0000020 "N" .
+
+ex:thickness a tto:OriginalThickness ;
+    tto:IAO_0000221 ex:testPiece_0 ;
+    tto:PMD_0000006 "4.5"^^xsd:float ;
+    tto:PMD_0000020 "mm" .
+
+ex:ultimate_tensile_strength a tto:UpperYieldStrength ;
+    tto:IAO_0000221 ex:testPiece_0 ;
+    tto:PMD_0000006 "48.01455925925926"^^xsd:float .
+
+ex:width a tto:OriginalWidth ;
+    tto:IAO_0000221 ex:testPiece_0 ;
+    tto:PMD_0000006 "6.0"^^xsd:float ;
+    tto:PMD_0000020 "mm" .
+
+ex:youngs_modulus a tto:SlopeOfTheElasticPart ;
+    tto:IAO_0000221 ex:testPiece_0 ;
+    tto:PMD_0000006 "793.7927659629179"^^xsd:float .
+
+ex:groupX a tto:TensileTestingMachine .
+
+ex:pair_0_elongation a tto:Elongation ;
+    tto:IAO_0000221 ex:testPiece_0 ;
+    tto:PMD_0000006 "0.0"^^xsd:float ;
+    tto:PMD_0000020 "mm" .
+
+ex:pair_1_elongation a tto:Elongation ;
+    tto:IAO_0000221 ex:testPiece_0 ;
+    tto:PMD_0000006 "0.0"^^xsd:float ;
+    tto:PMD_0000020 "mm" .
+
+ex:pair_2_elongation a tto:Elongation ;
+    tto:IAO_0000221 ex:testPiece_0 ;
+    tto:PMD_0000006 "0.00010157537"^^xsd:float ;
+    tto:PMD_0000020 "mm" .
+
+ex:testPiece_0 a tto:TestPiece .
+

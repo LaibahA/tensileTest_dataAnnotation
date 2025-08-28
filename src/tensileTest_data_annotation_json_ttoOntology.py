@@ -1,9 +1,10 @@
+import csv
 import os, json
 
 from rdflib import Graph, Namespace, Literal
 #Graph stores the RDF triples, Namespace is what lets us define the prefixes
 from rdflib.namespace import RDF, XSD
-#RDF is for the standard datatypes
+#RDF is for the standard datatypes, XSD is for formatting literals
 
 #Input and output directories
 #input_dir = "../data/FAIRtrain_data_json"
@@ -30,6 +31,9 @@ for filename in os.listdir(input_dir):
 
         BFO = Namespace("http://purl.obolibrary.org/obo/")
         g.bind("bfo", BFO)
+
+        CSVW = Namespace("http://www.w3.org/ns/csvw#")
+        g.bind("csvw", CSVW)
 
         '''
         Need to update namespace below to our domain
@@ -90,7 +94,7 @@ for filename in os.listdir(input_dir):
             g.add((youngs_mod_node, RDF.type, TTO.SlopeOfTheElasticPart))
             g.add((youngs_mod_node, PMD.PMD_0000006, Literal(data["extracted_properties"]["youngs_modulus"], datatype=XSD.float)))
             g.add((youngs_mod_node, PMD.PMD_0000020, QUDT.MegaPa))
-            g.add((test_uri, PMD.PMD_0000016, ult_tensile_strength)) #PMD_0000016 = has output
+            g.add((test_uri, PMD.PMD_0000016, youngs_mod_node)) #PMD_0000016 = has output
 
             #Ultimate tensile strength / upper yield strength
             ult_tensile_strength = EX[f"ultimate_tensile_strength"]
@@ -99,23 +103,17 @@ for filename in os.listdir(input_dir):
             g.add((ult_tensile_strength, PMD.PMD_0000020, QUDT.MegaPa))
             g.add((test_uri, PMD.PMD_0000016, ult_tensile_strength))
 
-            for i, point in enumerate(data["data"]):
-                #Force
-                force_node = EX[f"pair_{i}_force"]
-                g.add((force_node, RDF.type, TTO.Force))
-                g.add((force_node, TTO.PMD_0000006, Literal(point["N"], datatype=XSD.float)))
-                g.add((force_node, TTO.PMD_0000020, Literal("N")))
-                g.add((force_node, TTO.IAO_0000221, test_piece_uri))
+            csv_filename = sample_id + "_data.csv"
+            with open(csv_filename, mode="w", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow(["Force(N)", "Elongation(mm)"])  # header
+                for point in data["data"]:
+                    writer.writerow([point["N"], point["mm"]])
 
-                #Elongation
-                elong_node = EX[f"pair_{i}_elongation"]
-                g.add((elong_node, RDF.type, TTO.Elongation))
-                g.add((elong_node, TTO.PMD_0000006, Literal(point["mm"], datatype=XSD.float)))
-                g.add((elong_node, TTO.PMD_0000020, Literal("mm")))
-                g.add((elong_node, TTO.IAO_0000221, test_piece_uri))
-
-                #Pairing the elongation and force
-                g.add((force_node, TTO.BFO_0000195, elong_node)) # BFO_0000195, specifically depends on
+            csv_node = EX[sample_id+"_csv_data"]
+            g.add((csv_node, RDF.type, CSVW.table))  # Data table
+            g.add((test_uri, PMD.PMD_0000016, csv_node))  #the test has output of this data table
+            g.add((csv_node, PMD.PMD_0000006, Literal(csv_filename)))
 
             output_base_jsonld = os.path.join(output_dir_jsonld, f"annotated_{sample_id}")
             output_base_ttl = os.path.join(output_dir_ttl, f"annotated_{sample_id}")

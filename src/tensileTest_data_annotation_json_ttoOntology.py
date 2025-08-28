@@ -19,8 +19,17 @@ for filename in os.listdir(input_dir):
         g = Graph()  #Empty graph to store triples
 
         TTO = Namespace(
-            "https://materialdigital.github.io/application-ontologies/tto/#/")  #Here we are just saying that TTO is the namespace for our ontology
+            "https://materialdigital.github.io/application-ontologies/tto/#/")  #Here we are just saying that TTO is the namespace for the ontology
         g.bind("tto", TTO)  #Binding namespace to prefix, makes it easier to use
+
+        PMD = Namespace("https://materialdigital.github.io/core-ontology/")
+        g.bind("pmd", PMD)
+
+        QUDT = Namespace("http://qudt.org/vocab/unit/")
+        g.bind("qudt", QUDT)
+
+        BFO = Namespace("http://purl.obolibrary.org/obo/")
+        g.bind("bfo", BFO)
 
         '''
         Need to update namespace below to our domain
@@ -40,13 +49,14 @@ for filename in os.listdir(input_dir):
 
             #Declare test, test machine, and test piece
             g.add((test_uri, RDF.type, TTO.TensileTest))
-            g.add((test_piece_uri, RDF.type, TTO.TestPiece))
+            g.add((test_piece_uri, RDF.type, PMD.TestPiece))
             g.add((machine_uri, RDF.type, TTO.TensileTestingMachine))
 
             #Establish relationships between tensile test to test piece and machine
             # BFO_0000057, has participant
-            g.add((test_uri, TTO.BFO_0000057, test_piece_uri))
-            g.add((test_uri, TTO.BFO_0000057, machine_uri))
+            #Q should i just use pmd:input?
+            g.add((test_uri, BFO.BFO_0000057, test_piece_uri))
+            g.add((test_uri, BFO.BFO_0000057, machine_uri))
 
             #Original width
             #Creating a node to represent the concept of width for our data
@@ -54,36 +64,40 @@ for filename in os.listdir(input_dir):
             #Saying this node (subject) is a (predicate) object of this type (object)
             g.add((width_node, RDF.type, TTO.OriginalWidth))
             #Saying this node (subject) has numeric value (predicate) of this float (object)
-            g.add((width_node, TTO.PMD_0000006, Literal(data["width"], datatype=XSD.float))) # PMD_0000006, has value
-            g.add((width_node, TTO.PMD_0000020, Literal("mm"))) # PMD_0000020, has measurement unit label
+            g.add((width_node, PMD.PMD_0000006, Literal(data["width"], datatype=XSD.float))) # PMD_0000006, has value
+            # #Q should i use pmd:value and pmd:unit like paper?
+            g.add((width_node, PMD.PMD_0000020, QUDT.MilliM)) # PMD_0000020, has measurement unit label
             #Saying this node (subject) is a measurement relating to (predicate) the test piece (object)
-            g.add((width_node, TTO.IAO_0000221, test_piece_uri)) # IAO_0000221, is quality measurement of
+            g.add((width_node, BFO.IAO_0000221, test_piece_uri)) # IAO_0000221, is quality measurement of
+            #Q should i use pmd.characteristic like paper?
 
             #Original thickness
             thickness_node = EX[f"thickness"]
             g.add((thickness_node, RDF.type, TTO.OriginalThickness))
-            g.add((thickness_node, TTO.PMD_0000006, Literal(data["thickness"], datatype=XSD.float)))
-            g.add((thickness_node, TTO.PMD_0000020, Literal("mm")))
-            g.add((thickness_node, TTO.IAO_0000221, test_piece_uri))
+            g.add((thickness_node, PMD.PMD_0000006, Literal(data["thickness"], datatype=XSD.float)))
+            g.add((thickness_node, PMD.PMD_0000020, QUDT.MilliM))
+            g.add((thickness_node, BFO.IAO_0000221, test_piece_uri))
 
             #Gauge length
             length_node = EX[f"length"]
             g.add((length_node, RDF.type, TTO.OriginalGaugeLength))
-            g.add((length_node, TTO.PMD_0000006, Literal(data["length"], datatype=XSD.float)))
-            g.add((length_node, TTO.PMD_0000020, Literal("mm")))
-            g.add((length_node, TTO.IAO_0000221, test_piece_uri))
+            g.add((length_node, PMD.PMD_0000006, Literal(data["length"], datatype=XSD.float)))
+            g.add((length_node, PMD.PMD_0000020, QUDT.MilliM))
+            g.add((length_node, BFO.IAO_0000221, test_piece_uri))
 
             #Youngs modulus / slope of the elastic part
             youngs_mod_node = EX[f"youngs_modulus"]
             g.add((youngs_mod_node, RDF.type, TTO.SlopeOfTheElasticPart))
-            g.add((youngs_mod_node, TTO.PMD_0000006, Literal(data["extracted_properties"]["youngs_modulus"], datatype=XSD.float)))
-            g.add((youngs_mod_node, TTO.IAO_0000221, test_piece_uri))
+            g.add((youngs_mod_node, PMD.PMD_0000006, Literal(data["extracted_properties"]["youngs_modulus"], datatype=XSD.float)))
+            g.add((youngs_mod_node, PMD.PMD_0000020, QUDT.MegaPa))
+            g.add((test_uri, PMD.PMD_0000016, ult_tensile_strength)) #PMD_0000016 = has output
 
             #Ultimate tensile strength / upper yield strength
             ult_tensile_strength = EX[f"ultimate_tensile_strength"]
             g.add((ult_tensile_strength, RDF.type, TTO.UpperYieldStrength))
-            g.add((ult_tensile_strength, TTO.PMD_0000006, Literal(data["extracted_properties"]["ultimate_tensile_strength"], datatype=XSD.float)))
-            g.add((ult_tensile_strength, TTO.IAO_0000221, test_piece_uri))
+            g.add((ult_tensile_strength, PMD.PMD_0000006, Literal(data["extracted_properties"]["ultimate_tensile_strength"], datatype=XSD.float)))
+            g.add((ult_tensile_strength, PMD.PMD_0000020, QUDT.MegaPa))
+            g.add((test_uri, PMD.PMD_0000016, ult_tensile_strength))
 
             for i, point in enumerate(data["data"]):
                 #Force

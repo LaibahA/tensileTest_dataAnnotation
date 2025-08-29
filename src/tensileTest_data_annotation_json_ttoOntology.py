@@ -7,8 +7,8 @@ from rdflib.namespace import RDF, XSD
 #RDF is for the standard datatypes, XSD is for formatting literals
 
 #Input and output directories
-#input_dir = "../data/FAIRtrain_data_json"
-input_dir = "../data/FAIRtrain_example"
+input_dir = "../data/FAIRtrain_data_json"
+#input_dir = "../data/FAIRtrain_example"
 output_dir_jsonld = "../output/annotatedBy_TTO/jsonld_output"
 output_dir_ttl = "../output/annotatedBy_TTO/ttl_output"
 

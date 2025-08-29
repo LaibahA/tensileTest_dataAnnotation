@@ -12,6 +12,9 @@ input_dir = "../data/FAIRtrain_example"
 output_dir_jsonld = "../output/annotatedBy_TTO/jsonld_output"
 output_dir_ttl = "../output/annotatedBy_TTO/ttl_output"
 
+output_dir_csv = "../output/csv_data"
+os.makedirs(output_dir_csv, exist_ok=True)
+
 #Loop through each JSON file in the input directory
 for filename in os.listdir(input_dir):
     if filename.endswith(".json"):
@@ -25,6 +28,8 @@ for filename in os.listdir(input_dir):
 
         PMD = Namespace("https://materialdigital.github.io/core-ontology/")
         g.bind("pmd", PMD)
+
+        #second pmd. or, just adjust specifics to work with this
 
         QUDT = Namespace("http://qudt.org/vocab/unit/")
         g.bind("qudt", QUDT)
@@ -57,53 +62,50 @@ for filename in os.listdir(input_dir):
             g.add((machine_uri, RDF.type, TTO.TensileTestingMachine))
 
             #Establish relationships between tensile test to test piece and machine
-            # BFO_0000057, has participant
-            #Q should i just use pmd:input?
-            g.add((test_uri, BFO.BFO_0000057, test_piece_uri))
-            g.add((test_uri, BFO.BFO_0000057, machine_uri))
+            g.add((test_uri, PMD.input, test_piece_uri))
+            g.add((test_uri, PMD.input, machine_uri))
 
             #Original width
             #Creating a node to represent the concept of width for our data
-            width_node = EX[f"width"]
+            width_node = EX[f"{sample_id}_width"]
             #Saying this node (subject) is a (predicate) object of this type (object)
             g.add((width_node, RDF.type, TTO.OriginalWidth))
-            #Saying this node (subject) has numeric value (predicate) of this float (object)
-            g.add((width_node, PMD.PMD_0000006, Literal(data["width"], datatype=XSD.float))) # PMD_0000006, has value
-            # #Q should i use pmd:value and pmd:unit like paper?
-            g.add((width_node, PMD.PMD_0000020, QUDT.MilliM)) # PMD_0000020, has measurement unit label
-            #Saying this node (subject) is a measurement relating to (predicate) the test piece (object)
-            g.add((width_node, BFO.IAO_0000221, test_piece_uri)) # IAO_0000221, is quality measurement of
-            #Q should i use pmd.characteristic like paper?
+            #Saying this node (subject) has value (predicate) of this float (object)
+            g.add((width_node, PMD.value, Literal(data["width"], datatype=XSD.float)))
+            #Saying this node (subject) has unit (predicate) of this unit type (object)
+            g.add((width_node, PMD.unit, QUDT.MilliM))
+            #Saying this node (subject) is a characteristic of (predicate) the test piece (object)
+            g.add((width_node, PMD.characteristic, test_piece_uri))
 
             #Original thickness
-            thickness_node = EX[f"thickness"]
+            thickness_node = EX[f"{sample_id}_thickness"]
             g.add((thickness_node, RDF.type, TTO.OriginalThickness))
-            g.add((thickness_node, PMD.PMD_0000006, Literal(data["thickness"], datatype=XSD.float)))
-            g.add((thickness_node, PMD.PMD_0000020, QUDT.MilliM))
-            g.add((thickness_node, BFO.IAO_0000221, test_piece_uri))
+            g.add((thickness_node, PMD.value, Literal(data["thickness"], datatype=XSD.float)))
+            g.add((thickness_node, PMD.unit, QUDT.MilliM))
+            g.add((thickness_node, PMD.characteristic, test_piece_uri))
 
             #Gauge length
-            length_node = EX[f"length"]
+            length_node = EX[f"{sample_id}_length"]
             g.add((length_node, RDF.type, TTO.OriginalGaugeLength))
-            g.add((length_node, PMD.PMD_0000006, Literal(data["length"], datatype=XSD.float)))
-            g.add((length_node, PMD.PMD_0000020, QUDT.MilliM))
-            g.add((length_node, BFO.IAO_0000221, test_piece_uri))
+            g.add((length_node, PMD.value, Literal(data["length"], datatype=XSD.float)))
+            g.add((length_node, PMD.unit, QUDT.MilliM))
+            g.add((length_node, PMD.characteristic, test_piece_uri))
 
             #Youngs modulus / slope of the elastic part
-            youngs_mod_node = EX[f"youngs_modulus"]
+            youngs_mod_node = EX[f"{sample_id}_youngs_modulus"]
             g.add((youngs_mod_node, RDF.type, TTO.SlopeOfTheElasticPart))
-            g.add((youngs_mod_node, PMD.PMD_0000006, Literal(data["extracted_properties"]["youngs_modulus"], datatype=XSD.float)))
-            g.add((youngs_mod_node, PMD.PMD_0000020, QUDT.MegaPa))
-            g.add((test_uri, PMD.PMD_0000016, youngs_mod_node)) #PMD_0000016 = has output
+            g.add((youngs_mod_node, PMD.value, Literal(data["extracted_properties"]["youngs_modulus"], datatype=XSD.float)))
+            g.add((youngs_mod_node, PMD.unit, QUDT.MegaPa))
+            g.add((test_uri, PMD.output, youngs_mod_node))
 
             #Ultimate tensile strength / upper yield strength
-            ult_tensile_strength = EX[f"ultimate_tensile_strength"]
+            ult_tensile_strength = EX[f"{sample_id}_ultimate_tensile_strength"]
             g.add((ult_tensile_strength, RDF.type, TTO.UpperYieldStrength))
-            g.add((ult_tensile_strength, PMD.PMD_0000006, Literal(data["extracted_properties"]["ultimate_tensile_strength"], datatype=XSD.float)))
-            g.add((ult_tensile_strength, PMD.PMD_0000020, QUDT.MegaPa))
-            g.add((test_uri, PMD.PMD_0000016, ult_tensile_strength))
+            g.add((ult_tensile_strength, PMD.value, Literal(data["extracted_properties"]["ultimate_tensile_strength"], datatype=XSD.float)))
+            g.add((ult_tensile_strength, PMD.unit, QUDT.MegaPa))
+            g.add((test_uri, PMD.output, ult_tensile_strength))
 
-            csv_filename = sample_id + "_data.csv"
+            csv_filename = os.path.join(output_dir_csv, sample_id + "_data.csv")
             with open(csv_filename, mode="w", newline="") as f:
                 writer = csv.writer(f)
                 writer.writerow(["Force(N)", "Elongation(mm)"])  # header
@@ -112,8 +114,8 @@ for filename in os.listdir(input_dir):
 
             csv_node = EX[sample_id+"_csv_data"]
             g.add((csv_node, RDF.type, CSVW.table))  # Data table
-            g.add((test_uri, PMD.PMD_0000016, csv_node))  #the test has output of this data table
-            g.add((csv_node, PMD.PMD_0000006, Literal(csv_filename)))
+            g.add((test_uri, PMD.output, csv_node))  #the test has output of this data table
+            g.add((csv_node, CSVW.url, Literal(os.path.basename(csv_filename))))
 
             output_base_jsonld = os.path.join(output_dir_jsonld, f"annotated_{sample_id}")
             output_base_ttl = os.path.join(output_dir_ttl, f"annotated_{sample_id}")

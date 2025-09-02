@@ -1,0 +1,44 @@
+@prefix csvw: <http://www.w3.org/ns/csvw#> .
+@prefix ex: <http://example.org/tensile/> .
+@prefix pmd: <https://materialdigital.github.io/core-ontology/> .
+@prefix qudt: <http://qudt.org/vocab/unit/> .
+@prefix tto: <https://materialdigital.github.io/application-ontologies/tto/#/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:groupX_test_0 a tto:TensileTest ;
+    pmd:input ex:groupX,
+        ex:testPiece_0 ;
+    pmd:output ex:groupX_test_0_csv_data,
+        ex:groupX_test_0_ultimate_tensile_strength,
+        ex:groupX_test_0_youngs_modulus .
+
+ex:groupX_test_0_length a tto:OriginalGaugeLength ;
+    pmd:characteristic ex:testPiece_0 ;
+    pmd:unit qudt:MilliM ;
+    pmd:value "50.0"^^xsd:float .
+
+ex:groupX_test_0_thickness a tto:OriginalThickness ;
+    pmd:characteristic ex:testPiece_0 ;
+    pmd:unit qudt:MilliM ;
+    pmd:value "4.5"^^xsd:float .
+
+ex:groupX_test_0_width a tto:OriginalWidth ;
+    pmd:characteristic ex:testPiece_0 ;
+    pmd:unit qudt:MilliM ;
+    pmd:value "6.0"^^xsd:float .
+
+ex:groupX a tto:TensileTestingMachine .
+
+ex:groupX_test_0_csv_data a csvw:table ;
+    csvw:url "groupX_test_0_data.csv" .
+
+ex:groupX_test_0_ultimate_tensile_strength a tto:UpperYieldStrength ;
+    pmd:unit qudt:MegaPa ;
+    pmd:value "48.01455925925926"^^xsd:float .
+
+ex:groupX_test_0_youngs_modulus a tto:SlopeOfTheElasticPart ;
+    pmd:unit qudt:MegaPa ;
+    pmd:value "793.7927659629179"^^xsd:float .
+
+ex:testPiece_0 a pmd:TestPiece .
+

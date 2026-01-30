@@ -1,17 +1,16 @@
 import csv
 import os, json
 
-from rdflib import Graph, Namespace, Literal
+from rdflib import Graph, Namespace, Literal, URIRef, DC
 #Graph stores the RDF triples, Namespace is what lets us define the prefixes
-from rdflib.namespace import RDF, XSD
+from rdflib.namespace import RDF, XSD, OWL
 #RDF is for the standard datatypes, XSD is for formatting literals
 
 #Input and output directories
-input_dir = "../data/FAIRtrain_data_json"
-#input_dir = "../data/FAIRtrain_example"
-output_dir_jsonld = "../output/annotatedBy_TTO/jsonld_output"
-output_dir_ttl = "../output/annotatedBy_TTO/ttl_output"
-output_dir_csv = "../output/csv_data"
+input_dir = "../data/metals_dictionaries"
+output_dir_jsonld = "../output/metals/annotated_metals_jsonld"
+output_dir_ttl = "../output/metals/annotated_metals_ttl"
+output_dir_csv = "../output/metals/metals_csv_data"
 os.makedirs(output_dir_jsonld, exist_ok=True)
 os.makedirs(output_dir_ttl, exist_ok=True)
 os.makedirs(output_dir_csv, exist_ok=True)
@@ -21,20 +20,32 @@ g = Graph()  #Empty graph to store triples
 TTO = Namespace("https://materialdigital.github.io/application-ontologies/tto/#/")  #TTO is the namespace for the ontology
 PMD = Namespace("https://materialdigital.github.io/core-ontology/")
 QUDT = Namespace("http://qudt.org/vocab/unit/")
-BFO = Namespace("http://purl.obolibrary.org/obo/")
+OBO = Namespace("http://purl.obolibrary.org/obo/")
 CSVW = Namespace("http://www.w3.org/ns/csvw#")
+DCT = Namespace("http://purl.org/dc/terms/")
 
-g.bind("tto", TTO)  #Binding namespace to prefix, makes it easier to use
+g.bind("tto", TTO)  #Base
 g.bind("pmd", PMD)
 g.bind("qudt", QUDT)
-g.bind("bfo", BFO)
+g.bind("obo", OBO)
 g.bind("csvw", CSVW)
+g.bind("dct", DCT)
 
 '''
-Need to update namespace below to our domain
+Need to update namespace below to our zenodo link for the domain
 '''
-EX = Namespace("http://example.org/tensile/")  #This is an example, its gna be what builds the uri for our subject to annotate.
-g.bind("ex", EX)
+prefix = Namespace("http://example.org/tensile/")  #This is an example, its gna be what builds the uri for our subject to annotate.
+g.bind("prefix", prefix)
+
+#Create ontology using TTO as basis, TODO cite this
+onto = URIRef(prefix)
+g.add((onto, RDF.type, OWL.Ontology))
+g.add((onto, OWL.imports, URIRef(TTO)))
+
+g.add((onto, DC.title, Literal("Tensile Test Ontology (TTO) A-Box Data Mapping Example", datatype=XSD.string)))
+g.add((onto, OWL.versionInfo, Literal("3.0.0", datatype=XSD.string)))
+g.add((onto, DCT.description, Literal("This is an exemplary A-Box (instance data) representing tensile test results performed on an metal samples according to ISO 6892-1:2019-11. The data originates from a publicly available dataset hosted on Zenodo: TBD. The semantic structure is based on the Tensile Test Ontology (TTO) version 3.0 (https://github.com/materialdigital/tensile-test-ontology), complemented by concepts from the PMD Core Ontology (PMDco).", datatype=XSD.string)))
+
 
 #Loop through each JSON file in the input directory
 for filename in os.listdir(input_dir):
@@ -44,73 +55,114 @@ for filename in os.listdir(input_dir):
         with open(filepath) as f:
             data = json.load(f) #Makes the list of rows
 
+            #first, read in all the lines and save the variables. TODO clarify with olga if we should read everything in even if unused, or just note the stuff we won't use + aren't reading in coz unused
+            process_id = data["sample"]
+            date = data["date"]
+            material = data["material"]
+            width = data["Properties"]["width"]
+            thickness = data["Properties"]["thickness"]
+            gauge_length = data["Properties"]["gauge_length"]
+            ymVal = data["youngs_modulus"]["value"]
+            ymRef = data["youngs_modulus"]["reference"]
+            ymUnit = data["youngs_modulus"]["unit"]
+            ysVal = data["yield_strength"]["value"]
+            ysRef = data["yield_strength"]["reference"]
+            ysUnit = data["yield_strength"]["unit"]
+            safVal = data["strain_at_fracture"]["value"]
+            safRef = data["strain_at_fracture"]["reference"]
+            safUnit = data["strain_at_fracture"]["unit"]
+
             #Make uris
-            sample_id = data["sample_id"]
-            test_uri = EX[sample_id]
-            test_piece_id = sample_id.split("_")[2]
-            test_piece_uri = EX["testPiece_" + test_piece_id]
-            machine_uri = EX[data["sample_id"][:6]]
+            #experimentIRI is prefix + sample name
+            experimentIRI = URIRef(prefix + process_id)
+            g.add((experimentIRI, RDF.type, PMD.PMD_0000017)) #ExperimentIRI is an identifier
 
-            #Declare test, test machine, and test piece
-            g.add((test_uri, RDF.type, TTO.TensileTest))
-            g.add((test_piece_uri, RDF.type, PMD.TestPiece))
-            g.add((machine_uri, RDF.type, TTO.TensileTestingMachine))
+            #processIRI
+            processIRI = URIRef(experimentIRI + "_process")
+            g.add((processIRI, RDF.type, PMD.PMD_0000974)) #ProcessIRI is a tensile testing process
+            g.add((experimentIRI, OBO.IAO_0000219, processIRI))  # ExperimentIRI denotes tensile testing process
+            #todo cite the above since it's almost identical
 
-            #Establish relationships between tensile test to test piece and machine
-            g.add((test_uri, PMD.input, test_piece_uri))
-            g.add((test_uri, PMD.input, machine_uri))
+            #Width quality
+            widthIRI_quality = URIRef(experimentIRI + "_width_quality")
+            g.add((widthIRI_quality, RDF.type, TTO.OriginalWidth)) #is an OriginalWidth
+            g.add(processIRI, PMD.PMD_0000016, widthIRI_quality) #processIRI has output quality width
+            #Width scalar value specification
+            widthIRI_scalar_value = URIRef(experimentIRI + "_width_scalar_value_specification")
+            g.add(widthIRI_scalar_value, RDF.type, PMD.PMD_0000022) #is a scalar value specification
+            g.add((widthIRI_scalar_value, PMD.PMD_0000006, Literal(width, datatype=XSD.float))) #has value literal
+            g.add((widthIRI_scalar_value, OBO.IAO_0000039, QUDT.MilliM)) #has unit mm
+            g.add(widthIRI_scalar_value, PMD.PMD_0060001, widthIRI_quality) #Scalar value specifies value of quality width
 
-            #Original width
-            #Creating a node to represent the concept of width for our data
-            width_node = EX[f"{sample_id}_width"]
-            #Saying this node (subject) is a (predicate) object of this type (object)
-            g.add((width_node, RDF.type, TTO.OriginalWidth))
-            #Saying this node (subject) has value (predicate) of this float (object)
-            g.add((width_node, PMD.value, Literal(data["width"], datatype=XSD.float)))
-            #Saying this node (subject) has unit (predicate) of this unit type (object)
-            g.add((width_node, PMD.unit, QUDT.MilliM))
-            #Saying this node (subject) is a characteristic of (predicate) the test piece (object)
-            g.add((width_node, PMD.characteristic, test_piece_uri))
+            #Thickness quality
+            thicknessIRI_quality = URIRef(experimentIRI + "_thickness_quality")
+            g.add((thicknessIRI_quality, RDF.type, TTO.OriginalThickness))  # is an OriginalThickness
+            g.add(processIRI, PMD.PMD_0000016, thicknessIRI_quality)  # processIRI has output quality thickness
+            #Thickness specification
+            thicknessIRI_scalar_value = URIRef(experimentIRI + "_thickness_scalar_value_specification")
+            g.add(thicknessIRI_scalar_value, RDF.type, PMD.PMD_0000022)  # is a scalar value specification
+            g.add((thicknessIRI_scalar_value, PMD.PMD_0000006, Literal(thickness, datatype=XSD.float)))  # has value literal
+            g.add((thicknessIRI_scalar_value, OBO.IAO_0000039, QUDT.MilliM)) # has unit MilliM
+            g.add(thicknessIRI_scalar_value, PMD.PMD_0060001, thicknessIRI_quality)  # Scalar value specifies value of quality thickness
 
-            #Original thickness
-            thickness_node = EX[f"{sample_id}_thickness"]
-            g.add((thickness_node, RDF.type, TTO.OriginalThickness))
-            g.add((thickness_node, PMD.value, Literal(data["thickness"], datatype=XSD.float)))
-            g.add((thickness_node, PMD.unit, QUDT.MilliM))
-            g.add((thickness_node, PMD.characteristic, test_piece_uri))
+            #Gauge length quality
+            lengthIRI_quality = URIRef(experimentIRI + "_gauge_length_quality")
+            g.add((lengthIRI_quality, RDF.type, TTO.OriginalGaugeLength))  # is an OriginalGaugeLength
+            g.add(processIRI, PMD.PMD_0000016, lengthIRI_quality)  # processIRI has output quality length
+            #Gauge length specification
+            lengthIRI_scalar_value = URIRef(experimentIRI + "_gauge_length_scalar_value_specification")
+            g.add(lengthIRI_scalar_value, RDF.type, PMD.PMD_0000022)  # is a scalar value specification
+            g.add((lengthIRI_scalar_value, PMD.PMD_0000006,Literal(gauge_length, datatype=XSD.float)))  # has value literal
+            g.add((lengthIRI_scalar_value, OBO.IAO_0000039, QUDT.MilliM)) # has unit MilliM
+            g.add(lengthIRI_scalar_value, PMD.PMD_0060001, lengthIRI_quality)  # Scalar value specifies value of quality length
 
-            #Gauge length
-            length_node = EX[f"{sample_id}_length"]
-            g.add((length_node, RDF.type, TTO.OriginalGaugeLength))
-            g.add((length_node, PMD.value, Literal(data["length"], datatype=XSD.float)))
-            g.add((length_node, PMD.unit, QUDT.MilliM))
-            g.add((length_node, PMD.characteristic, test_piece_uri))
+            #Youngs modulus quality
+            ymIRI_quality = URIRef(experimentIRI + "_youngs_modulus_quality")
+            g.add((ymIRI_quality, RDF.type, TTO.SlopeOfTheElasticPart))  # is a SlopeOfTheElasticPart
+            g.add(processIRI, PMD.PMD_0000016, ymIRI_quality)  # processIRI has output quality youngs modulus
+            #Youngs modulus specification
+            ymIRI_scalar_value = URIRef(experimentIRI + "_youngs_modulus_scalar_value_specification")
+            g.add(ymIRI_scalar_value, RDF.type, PMD.PMD_0000022)  # is a scalar value specification
+            g.add((ymIRI_scalar_value, PMD.PMD_0000006, Literal(ymVal, datatype=XSD.float)))  # has value literal
+            g.add((ymIRI_scalar_value, OBO.IAO_0000039, QUDT.MegaPa)) # has unit MegaPa
+            g.add(ymIRI_scalar_value, PMD.PMD_0060001,ymIRI_quality)  # Scalar value specifies value of quality youngs modulus
 
-            #Youngs modulus / slope of the elastic part
-            youngs_mod_node = EX[f"{sample_id}_youngs_modulus"]
-            g.add((youngs_mod_node, RDF.type, TTO.SlopeOfTheElasticPart))
-            g.add((youngs_mod_node, PMD.value, Literal(data["extracted_properties"]["youngs_modulus"], datatype=XSD.float)))
-            g.add((youngs_mod_node, PMD.unit, QUDT.MegaPa))
-            g.add((test_uri, PMD.output, youngs_mod_node))
+            #Yield Strength quality
+            ysIRI_quality = URIRef(experimentIRI + "_yield_strength_quality")
+            g.add((ysIRI_quality, RDF.type, TTO.YieldStrength))  # is a YieldStrength
+            g.add(processIRI, PMD.PMD_0000016, ysIRI_quality)  # processIRI has output quality yield strength
+            #Yield Strength specification
+            ysIRI_scalar_value = URIRef(experimentIRI + "_yield_strength_scalar_value_specification")
+            g.add(ysIRI_scalar_value, RDF.type, PMD.PMD_0000022)  # is a scalar value specification
+            g.add((ysIRI_scalar_value, PMD.PMD_0000006, Literal(ysVal, datatype=XSD.float)))  # has value literal
+            g.add((ysIRI_scalar_value, OBO.IAO_0000039, QUDT.MegaPa)) # has unit MegaPa
+            g.add(ysIRI_scalar_value, PMD.PMD_0060001, ysIRI_quality)  # Scalar value specifies value of quality yield strength
 
-            #Ultimate tensile strength / upper yield strength
-            ult_tensile_strength = EX[f"{sample_id}_ultimate_tensile_strength"]
-            g.add((ult_tensile_strength, RDF.type, TTO.UpperYieldStrength))
-            g.add((ult_tensile_strength, PMD.value, Literal(data["extracted_properties"]["ultimate_tensile_strength"], datatype=XSD.float)))
-            g.add((ult_tensile_strength, PMD.unit, QUDT.MegaPa))
-            g.add((test_uri, PMD.output, ult_tensile_strength))
+            #Strain at fracture quality
+            safIRI_quality = URIRef(experimentIRI + "_strain_at_fracture_quality")
+            g.add((safIRI_quality, RDF.type, TTO.PercentageTotalExtensionAtFracture))  # is a PercentageTotalExtensionAtFracture
+            g.add(processIRI, PMD.PMD_0000016, safIRI_quality)  # processIRI has output quality percentage total extension at fracture
+            #Strain at fracture specification
+            safIRI_scalar_value = URIRef(experimentIRI + "_strain_at_fracture_value_specification")
+            g.add(safIRI_scalar_value, RDF.type, PMD.PMD_0000022)  # is a scalar value specification
+            g.add((safIRI_scalar_value, PMD.PMD_0000006, Literal(safVal, datatype=XSD.float)))  # has value literal
+            g.add((safIRI_scalar_value, OBO.IAO_0000039, safUnit))  # has unit mm/mm
+            g.add(safIRI_scalar_value, PMD.PMD_0060001, safIRI_quality)  # Scalar value specifies value of quality strain at fracture
 
-            csv_filename = os.path.join(output_dir_csv, sample_id + "_data.csv")
+            csv_filename = os.path.join(output_dir_csv, process_id + "_data.csv")
             with open(csv_filename, mode="w", newline="") as f:
                 writer = csv.writer(f)
                 writer.writerow(["Force(N)", "Elongation(mm)"])  # header
-                for point in data["data"]:
-                    writer.writerow([point["N"], point["mm"]])
+                for point in data["raw_data"]:
+                    writer.writerow([point["force"], point["elongation"]])
 
-            csv_node = EX[sample_id+"_csv_data"]
-            g.add((csv_node, RDF.type, CSVW.Table))  # Data table
-            g.add((test_uri, PMD.output, csv_node))  #the test has output of this data table
-            g.add((csv_node, CSVW.url, Literal(os.path.basename(csv_filename))))
+            datasetIRI = URIRef(experimentIRI + "_dataset")
+            g.add(processIRI, PMD.PMD_0000016, datasetIRI) #processIRI has output dataset  datasetIRI
+            g.add((datasetIRI, RDF.type, CSVW.Table))
+            g.add((datasetIRI, CSVW.url, Literal(os.path.basename(csv_filename))))
+            g.add((datasetIRI, RDF.type, OBO.IAO_0000109)) # is a measurement datum
+            #todo do we want a title for the dataset table? Force Displacement Curve
+
 
 
 #Serializing in jsonld and ttl

@@ -1,0 +1,100 @@
+{
+  "Processed_Data": {
+    "engineering_strain": [
+            0.0,
+            1.9709206355855713e-06,
+            2.574168291857859e-06,
+            3.664700898298179e-07
+    ],
+    "engineering_stress": [
+            0.27404127629393676,
+            0.24633678221205155,
+            0.25828487193885286,
+            0.26348768913738824
+    ],
+    "true_strain": [
+            0.0,
+            1.9709186933240473e-06,
+            2.5741649786923474e-06,
+            3.6647002267967094e-07
+    ],
+    "true_stress": [
+            0.27404127629393676,
+            0.2463372677222989,
+            0.2582855368075805,
+            0.26348778569774534
+    ]
+  },
+  "Properties": {
+        "gauge_length": 50.0,
+        "thickness": 3.05,
+        "width": 13.57
+    },
+    "date": "2025-10-7",
+    "material": "Aluminum",
+    "modulus_of_resilience": {
+        "reference": "ASTM D620-18: Modulus of Resilience",
+        "units": "MPa",
+        "value": 1.13
+    },
+    "modulus_of_toughness": {
+        "reference": "ASTM E1820 Toughness",
+        "units": "MPa",
+        "value": 12.07
+    },
+    "poissons_ratio": {
+        "reference": "ASTM D638-22: A3 Measurement of Poissons Ratio",
+        "units": "dimensionless",
+        "value": 0.11
+    },
+    "proportional_limit": {
+        "reference": "ASTM D638-22: A2.1 Elastic Limit",
+        "strain": 0.01,
+        "strain_units": "mm/mm",
+        "stress": 271.32,
+        "stress_units": "MPa"
+    },
+    "raw_data": {
+        "elongation": [
+            -0.00022222226903068076,
+            0.00016494875865191716,
+            -7.040909189015565e-06,
+            -5.487648024882219e-05
+        ],
+        "force": [
+            0.8975933194160461,
+            -1.852947473526001,
+            0.038253992795944214,
+            0.32932785153388977
+        ]
+    },
+    "sample": "TestMetal",
+    "strain_at_fracture": {
+        "reference": "ASTM D638-22: A2.24 and A2.25",
+        "units": "mm/mm",
+        "value": 0.1146
+    },
+    "true_stress_at_fracture": {
+        "reference": "ASTM D638-22: A2.24 and A2.25",
+        "units": "MPa",
+        "value": 344.65
+    },
+    "units": {
+        "elongation": "mm",
+        "force": "N",
+        "strain": "mm/mm",
+        "stress": "MPa",
+        "thickness": "mm",
+        "width": "mm"
+    },
+    "yield_strength": {
+        "reference": "ASTM D638-22: A2.6 Offset Yield Strength",
+        "units": "MPa",
+        "value": 273.98
+    },
+    "youngs_modulus": {
+        "reference": "ASTM D638-22: A2.4 Modulus of Elasticity",
+        "units": "MPa",
+        "value": 65291.94
+    }
+}

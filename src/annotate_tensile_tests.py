@@ -86,71 +86,88 @@ for filename in os.listdir(input_dir):
             g.add((experimentIRI, OBO.IAO_0000219, processIRI))  # ExperimentIRI denotes tensile testing process
             #todo cite the above since it's almost identical
 
-            #Width quality
-            widthIRI_quality = URIRef(experimentIRI + "_width_quality")
-            g.add((widthIRI_quality, RDF.type, TTO.OriginalWidth)) #is an OriginalWidth
-            g.add((processIRI, PMD.PMD_0000016, widthIRI_quality)) #processIRI has output quality width
-            #Width scalar value specification
-            widthIRI_scalar_value = URIRef(experimentIRI + "_width_scalar_value_specification")
-            g.add((widthIRI_scalar_value, RDF.type, PMD.PMD_0000022)) #is a scalar value specification
-            g.add((widthIRI_scalar_value, PMD.PMD_0000006, Literal(width, datatype=XSD.float))) #has value literal
-            g.add((widthIRI_scalar_value, OBO.IAO_0000039, QUDT.MilliM)) #has unit mm
-            g.add((widthIRI_scalar_value, PMD.PMD_0060001, widthIRI_quality)) #Scalar value specifies value of quality width
+            testPieceIRI = URIRef(experimentIRI + "_test_piece")
+            g.add((testPieceIRI, RDF.type, TTO.TTO_0000055))
+            g.add((processIRI, PMD.PMD_0000015, testPieceIRI)) #ProcessIRI has input test piece
 
             #Thickness quality
             thicknessIRI_quality = URIRef(experimentIRI + "_thickness_quality")
             g.add((thicknessIRI_quality, RDF.type, TTO.OriginalThickness))  # is an OriginalThickness
             g.add((processIRI, PMD.PMD_0000016, thicknessIRI_quality))  # processIRI has output quality thickness
+            g.add((testPieceIRI, OBO.BFO_0000196, thicknessIRI_quality))  # Test piece bears the quality of thickness
             #Thickness specification
             thicknessIRI_scalar_value = URIRef(experimentIRI + "_thickness_scalar_value_specification")
             g.add((thicknessIRI_scalar_value, RDF.type, PMD.PMD_0000022))  # is a scalar value specification
             g.add((thicknessIRI_scalar_value, PMD.PMD_0000006, Literal(thickness, datatype=XSD.float)))  # has value literal
             g.add((thicknessIRI_scalar_value, OBO.IAO_0000039, QUDT.MilliM)) # has unit MilliM
             g.add((thicknessIRI_scalar_value, PMD.PMD_0060001, thicknessIRI_quality))  # Scalar value specifies value of quality thickness
+            g.add((thicknessIRI_scalar_value, OBO.IAO_0000136, testPieceIRI))  # is about test piece
+
+            # Width quality
+            widthIRI_quality = URIRef(experimentIRI + "_width_quality")
+            g.add((widthIRI_quality, RDF.type, TTO.OriginalWidth))  # is an OriginalWidth
+            g.add((processIRI, PMD.PMD_0000016, widthIRI_quality))  # processIRI has output quality width
+            g.add((testPieceIRI, OBO.BFO_0000196, widthIRI_quality))  # Test piece bears the quality of width
+            # Width scalar value specification
+            widthIRI_scalar_value = URIRef(experimentIRI + "_width_scalar_value_specification")
+            g.add((widthIRI_scalar_value, RDF.type, PMD.PMD_0000022))  # is a scalar value specification
+            g.add((widthIRI_scalar_value, PMD.PMD_0000006, Literal(width, datatype=XSD.float)))  # has value literal
+            g.add((widthIRI_scalar_value, OBO.IAO_0000039, QUDT.MilliM))  # has unit mm
+            g.add((widthIRI_scalar_value, PMD.PMD_0060001,
+                   widthIRI_quality))  # Scalar value specifies value of quality width
+            g.add((widthIRI_scalar_value, OBO.IAO_0000136, testPieceIRI))  # is about test piece
 
             #Gauge length quality
             lengthIRI_quality = URIRef(experimentIRI + "_gauge_length_quality")
             g.add((lengthIRI_quality, RDF.type, TTO.OriginalGaugeLength))  # is an OriginalGaugeLength
             g.add((processIRI, PMD.PMD_0000016, lengthIRI_quality))  # processIRI has output quality length
+            g.add((testPieceIRI, OBO.BFO_0000196, lengthIRI_quality))  # Test piece bears the quality of gauge length
             #Gauge length specification
             lengthIRI_scalar_value = URIRef(experimentIRI + "_gauge_length_scalar_value_specification")
             g.add((lengthIRI_scalar_value, RDF.type, PMD.PMD_0000022))  # is a scalar value specification
             g.add((lengthIRI_scalar_value, PMD.PMD_0000006,Literal(gauge_length, datatype=XSD.float)))  # has value literal
             g.add((lengthIRI_scalar_value, OBO.IAO_0000039, QUDT.MilliM)) # has unit MilliM
             g.add((lengthIRI_scalar_value, PMD.PMD_0060001, lengthIRI_quality))  # Scalar value specifies value of quality length
+            g.add((lengthIRI_scalar_value, OBO.IAO_0000136, testPieceIRI))  # is about test piece
 
             #Youngs modulus quality
             ymIRI_quality = URIRef(experimentIRI + "_youngs_modulus_quality")
             g.add((ymIRI_quality, RDF.type, TTO.SlopeOfTheElasticPart))  # is a SlopeOfTheElasticPart
             g.add((processIRI, PMD.PMD_0000016, ymIRI_quality))  # processIRI has output quality youngs modulus
+            g.add((testPieceIRI, OBO.BFO_0000196, ymIRI_quality))  # Test piece bears the property of youngs modulus
             #Youngs modulus specification
             ymIRI_scalar_value = URIRef(experimentIRI + "_youngs_modulus_scalar_value_specification")
             g.add((ymIRI_scalar_value, RDF.type, PMD.PMD_0000022))  # is a scalar value specification
             g.add((ymIRI_scalar_value, PMD.PMD_0000006, Literal(ymVal, datatype=XSD.float)))  # has value literal
             g.add((ymIRI_scalar_value, OBO.IAO_0000039, QUDT.MegaPa)) # has unit MegaPa
             g.add((ymIRI_scalar_value, PMD.PMD_0060001,ymIRI_quality))  # Scalar value specifies value of quality youngs modulus
+            g.add((ymIRI_scalar_value, OBO.IAO_0000136, testPieceIRI))  # is about test piece
 
             #Yield Strength quality
             ysIRI_quality = URIRef(experimentIRI + "_yield_strength_quality")
             g.add((ysIRI_quality, RDF.type, TTO.YieldStrength))  # is a YieldStrength
             g.add((processIRI, PMD.PMD_0000016, ysIRI_quality))  # processIRI has output quality yield strength
+            g.add((testPieceIRI, OBO.BFO_0000196, ysIRI_quality))  # Test piece bears the property of yield strength
             #Yield Strength specification
             ysIRI_scalar_value = URIRef(experimentIRI + "_yield_strength_scalar_value_specification")
             g.add((ysIRI_scalar_value, RDF.type, PMD.PMD_0000022))  # is a scalar value specification
             g.add((ysIRI_scalar_value, PMD.PMD_0000006, Literal(ysVal, datatype=XSD.float)))  # has value literal
             g.add((ysIRI_scalar_value, OBO.IAO_0000039, QUDT.MegaPa)) # has unit MegaPa
             g.add((ysIRI_scalar_value, PMD.PMD_0060001, ysIRI_quality))  # Scalar value specifies value of quality yield strength
+            g.add((ysIRI_scalar_value, OBO.IAO_0000136, testPieceIRI))  # is about test piece
 
             #Strain at fracture quality
             safIRI_quality = URIRef(experimentIRI + "_strain_at_fracture_quality")
             g.add((safIRI_quality, RDF.type, TTO.PercentageTotalExtensionAtFracture))  # is a PercentageTotalExtensionAtFracture
             g.add((processIRI, PMD.PMD_0000016, safIRI_quality))  # processIRI has output quality percentage total extension at fracture
+            g.add((testPieceIRI, OBO.BFO_0000196, safIRI_quality))  # Test piece bears the quality of strain at fracture
             #Strain at fracture specification
             safIRI_scalar_value = URIRef(experimentIRI + "_strain_at_fracture_value_specification")
             g.add((safIRI_scalar_value, RDF.type, PMD.PMD_0000022))  # is a scalar value specification
             g.add((safIRI_scalar_value, PMD.PMD_0000006, Literal(safVal, datatype=XSD.float)))  # has value literal
             g.add((safIRI_scalar_value, OBO.IAO_0000039, Literal(safUnit)))  # has unit mm/mm
             g.add((safIRI_scalar_value, PMD.PMD_0060001, safIRI_quality))  # Scalar value specifies value of quality strain at fracture
+            g.add((safIRI_scalar_value, OBO.IAO_0000136, testPieceIRI))  # is about test piece
 
             csv_filename = os.path.join(output_dir_csv, process_id + "_data.csv")
             with open(csv_filename, mode="w", newline="") as f:
@@ -163,7 +180,7 @@ for filename in os.listdir(input_dir):
 
             datasetIRI = URIRef(experimentIRI + "_dataset")
             g.add((processIRI, PMD.PMD_0000016, datasetIRI)) #processIRI has output dataset datasetIRI
-            g.add((datasetIRI, RDF.type, CSVW.Table))
+            g.add((datasetIRI, RDF.type, CSVW.Table)) # is a table
             g.add((datasetIRI, CSVW.url, Literal(os.path.basename(csv_filename))))
             g.add((datasetIRI, RDF.type, OBO.IAO_0000109)) # is a measurement datum
             g.add((datasetIRI, DC.title,

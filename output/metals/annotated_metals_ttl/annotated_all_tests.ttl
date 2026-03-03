@@ -1,0 +1,76 @@
+@prefix csvw: <http://www.w3.org/ns/csvw#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pmd: <https://materialdigital.github.io/core-ontology/> .
+@prefix prefix: <http://example.org/tensile/> .
+@prefix qudt: <http://qudt.org/vocab/unit/> .
+@prefix tto: <https://materialdigital.github.io/application-ontologies/tto/#/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+prefix: a owl:Ontology ;
+    dc:title "Tensile Test Ontology (TTO) A-Box Data Mapping Example"^^xsd:string ;
+    dct:description "This is an exemplary A-Box (instance data) representing tensile test results performed on an metal samples according to ISO 6892-1:2019-11. The data originates from a publicly available dataset hosted on Zenodo: TBD. The semantic structure is based on the Tensile Test Ontology (TTO) version 3.0 (https://github.com/materialdigital/tensile-test-ontology), complemented by concepts from the PMD Core Ontology (PMDco)."^^xsd:string ;
+    owl:imports tto: ;
+    owl:versionInfo "3.0.0"^^xsd:string .
+
+prefix:TestMetal a pmd:PMD_0000017 ;
+    obo:IAO_0000219 prefix:TestMetal_process .
+
+prefix:TestMetal_gauge_length_scalar_value_specification a pmd:PMD_0000022 ;
+    obo:IAO_0000039 qudt:MilliM ;
+    pmd:PMD_0000006 "50.0"^^xsd:float ;
+    pmd:PMD_0060001 prefix:TestMetal_gauge_length_quality .
+
+prefix:TestMetal_strain_at_fracture_value_specification a pmd:PMD_0000022 ;
+    obo:IAO_0000039 "mm/mm" ;
+    pmd:PMD_0000006 "0.1146"^^xsd:float ;
+    pmd:PMD_0060001 prefix:TestMetal_strain_at_fracture_quality .
+
+prefix:TestMetal_thickness_scalar_value_specification a pmd:PMD_0000022 ;
+    obo:IAO_0000039 qudt:MilliM ;
+    pmd:PMD_0000006 "3.05"^^xsd:float ;
+    pmd:PMD_0060001 prefix:TestMetal_thickness_quality .
+
+prefix:TestMetal_width_scalar_value_specification a pmd:PMD_0000022 ;
+    obo:IAO_0000039 qudt:MilliM ;
+    pmd:PMD_0000006 "13.57"^^xsd:float ;
+    pmd:PMD_0060001 prefix:TestMetal_width_quality .
+
+prefix:TestMetal_yield_strength_scalar_value_specification a pmd:PMD_0000022 ;
+    obo:IAO_0000039 qudt:MegaPa ;
+    pmd:PMD_0000006 "273.98"^^xsd:float ;
+    pmd:PMD_0060001 prefix:TestMetal_yield_strength_quality .
+
+prefix:TestMetal_youngs_modulus_scalar_value_specification a pmd:PMD_0000022 ;
+    obo:IAO_0000039 qudt:MegaPa ;
+    pmd:PMD_0000006 "65291.94"^^xsd:float ;
+    pmd:PMD_0060001 prefix:TestMetal_youngs_modulus_quality .
+
+prefix:TestMetal_dataset a obo:IAO_0000109,
+        csvw:Table ;
+    dc:title "process/TestMetal Force Displacement Curve"^^xsd:string ;
+    csvw:url "TestMetal_data.csv" .
+
+prefix:TestMetal_process a pmd:PMD_0000974 ;
+    pmd:PMD_0000016 prefix:TestMetal_dataset,
+        prefix:TestMetal_gauge_length_quality,
+        prefix:TestMetal_strain_at_fracture_quality,
+        prefix:TestMetal_thickness_quality,
+        prefix:TestMetal_width_quality,
+        prefix:TestMetal_yield_strength_quality,
+        prefix:TestMetal_youngs_modulus_quality .
+
+prefix:TestMetal_gauge_length_quality a tto:OriginalGaugeLength .
+
+prefix:TestMetal_strain_at_fracture_quality a tto:PercentageTotalExtensionAtFracture .
+
+prefix:TestMetal_thickness_quality a tto:OriginalThickness .
+
+prefix:TestMetal_width_quality a tto:OriginalWidth .
+
+prefix:TestMetal_yield_strength_quality a tto:YieldStrength .
+
+prefix:TestMetal_youngs_modulus_quality a tto:SlopeOfTheElasticPart .
+

@@ -214,14 +214,13 @@ for filename in os.listdir(input_dir):
                 print(f"Error: {e.message}")
                 continue  # Skip this file and move to next
 
-
-            #First, read in all the lines and save the variables.
-            process_id = quote(data["sample"])
+            # First, read in all the lines and save the variables.
+            process_id = data["sample"]
             date = data["date"]
             material = data["material"]
-            width = data["Geometry"]["width"]
-            thickness = data["Geometry"]["thickness"]
-            gauge_length = data["Geometry"]["gauge_length"]
+            width = data["Properties"]["width"]
+            thickness = data["Properties"]["thickness"]
+            gauge_length = data["Properties"]["gauge_length"]
             ymVal = data["youngs_modulus"]["value"]
             ymRef = data["youngs_modulus"]["reference"]
             ymUnit = data["youngs_modulus"]["units"]
@@ -231,8 +230,8 @@ for filename in os.listdir(input_dir):
             safVal = data["strain_at_fracture"]["value"]
             safRef = data["strain_at_fracture"]["reference"]
             safUnit = data["strain_at_fracture"]["units"]
-            forces = data["raw_data"]["load"]
-            elongations = data["raw_data"]["displacement"]
+            forces = data["raw_data"]["force"]
+            elongations = data["raw_data"]["elongation"]
 
             #Make uris
             #experimentIRI is prefix + sample name

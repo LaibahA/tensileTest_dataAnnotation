@@ -1,3 +1,6 @@
+#Acknowledgment
+#This work is based on the tensile testing ontology and annotation script developed by Markus Schilling (BAM, Germany).
+
 import csv
 import os, json
 
@@ -8,7 +11,6 @@ from rdflib.namespace import RDF, XSD, OWL
 
 #Input and output directories
 input_dir = "../data/metals_dictionaries"
-input_dir = "../data/metals_example"
 output_dir_jsonld = "../output/metals/annotated_metals_jsonld"
 output_dir_ttl = "../output/metals/annotated_metals_ttl"
 output_dir_csv = "../output/metals/metals_csv_data"
@@ -35,10 +37,10 @@ g.bind("dct", DCT)
 '''
 Need to update namespace below to our zenodo link for the domain
 '''
-prefix = Namespace("http://example.org/tensile/")  #This is an example, its gna be what builds the uri for our subject to annotate.
+prefix = Namespace("https://zenodo.org/records/19007867")  #This is what builds the uri for our subject to annotate.
 g.bind("prefix", prefix)
 
-#Create ontology using TTO as basis, TODO cite this
+#Create ontology using TTO as basis
 onto = URIRef(prefix)
 g.add((onto, RDF.type, OWL.Ontology))
 g.add((onto, OWL.imports, URIRef(TTO)))
@@ -56,7 +58,7 @@ for filename in os.listdir(input_dir):
         with open(filepath) as f:
             data = json.load(f) #Makes the list of rows
 
-            #first, read in all the lines and save the variables. TODO clarify with olga if we should read everything in even if unused, or just note the stuff we won't use + aren't reading in coz unused
+            #First, read in all the lines and save the variables.
             process_id = data["sample"]
             date = data["date"]
             material = data["material"]
@@ -84,7 +86,6 @@ for filename in os.listdir(input_dir):
             processIRI = URIRef(experimentIRI + "_process")
             g.add((processIRI, RDF.type, PMD.PMD_0000974)) #ProcessIRI is a tensile testing process
             g.add((experimentIRI, OBO.IAO_0000219, processIRI))  # ExperimentIRI denotes tensile testing process
-            #todo cite the above since it's almost identical
 
             testPieceIRI = URIRef(experimentIRI + "_test_piece")
             g.add((testPieceIRI, RDF.type, TTO.TTO_0000055))
@@ -175,17 +176,18 @@ for filename in os.listdir(input_dir):
                 writer.writerow(["Force(N)", "Elongation(mm)"])  # header
 
                 # zip() pairs the 1st force with the 1st elongation, then the 2nd, etc.
-                for f, e in zip(forces, elongations):
-                    writer.writerow([f, e])
+                for f_val, e_val in zip(forces, elongations):
+                    writer.writerow([f_val, e_val])
 
             datasetIRI = URIRef(experimentIRI + "_dataset")
             g.add((processIRI, PMD.PMD_0000016, datasetIRI)) #processIRI has output dataset datasetIRI
             g.add((datasetIRI, RDF.type, CSVW.Table)) # is a table
-            g.add((datasetIRI, CSVW.url, Literal(os.path.basename(csv_filename))))
+            csv_name = process_id + "_data.csv"
+            g.add((datasetIRI, CSVW.url, URIRef(f"https://zenodo.org/records/1234567/files/{csv_name}")))
+            #g.add((datasetIRI, CSVW.url, URIRef(https://zenodo.org/records/19007867/files/{csv_name}")))
             g.add((datasetIRI, RDF.type, OBO.IAO_0000109)) # is a measurement datum
             g.add((datasetIRI, DC.title,
-                   Literal(f"process/{process_id}" + f" Force Displacement Curve", datatype=XSD.string)))
-            #g.add((datasetIRI, csvw.url, Literal(TBD, datatype=XSD.string))) include url to data on zenodo later
+                   Literal(process_id + " Force Displacement Curve", datatype=XSD.string)))
 
 
 

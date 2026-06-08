@@ -1,0 +1,318 @@
+[
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_yield_strength_quality",
+    "@type": [
+      "https://materialdigital.github.io/application-ontologies/tto/#/YieldStrength"
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_test_piece",
+    "@type": [
+      "https://materialdigital.github.io/application-ontologies/tto/#/TTO_0000055"
+    ],
+    "http://purl.obolibrary.org/obo/BFO_0000196": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_thickness_quality"
+      },
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_width_quality"
+      },
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_gauge_length_quality"
+      },
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_youngs_modulus_quality"
+      },
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_yield_strength_quality"
+      },
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_strain_at_fracture_quality"
+      }
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_width_quality",
+    "@type": [
+      "https://materialdigital.github.io/application-ontologies/tto/#/OriginalWidth"
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_youngs_modulus_quality",
+    "@type": [
+      "https://materialdigital.github.io/application-ontologies/tto/#/SlopeOfTheElasticPart"
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_thickness_quality",
+    "@type": [
+      "https://materialdigital.github.io/application-ontologies/tto/#/OriginalThickness"
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_strain_at_fracture_quality",
+    "@type": [
+      "https://materialdigital.github.io/application-ontologies/tto/#/PercentageTotalExtensionAtFracture"
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_gauge_length_quality",
+    "@type": [
+      "https://materialdigital.github.io/application-ontologies/tto/#/OriginalGaugeLength"
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_yield_strength_scalar_value_specification",
+    "@type": [
+      "https://materialdigital.github.io/core-ontology/PMD_0000022"
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000039": [
+      {
+        "@id": "http://qudt.org/vocab/unit/MegaPa"
+      }
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000136": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_test_piece"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0000006": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#float",
+        "@value": "273.98"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0060001": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_yield_strength_quality"
+      }
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_thickness_scalar_value_specification",
+    "@type": [
+      "https://materialdigital.github.io/core-ontology/PMD_0000022"
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000039": [
+      {
+        "@id": "http://qudt.org/vocab/unit/MilliM"
+      }
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000136": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_test_piece"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0000006": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#float",
+        "@value": "3.05"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0060001": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_thickness_quality"
+      }
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867",
+    "@type": [
+      "http://www.w3.org/2002/07/owl#Ontology"
+    ],
+    "http://purl.org/dc/elements/1.1/title": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Tensile Test Ontology (TTO) A-Box Data Mapping Example"
+      }
+    ],
+    "http://purl.org/dc/terms/description": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "This is an exemplary A-Box (instance data) representing tensile test results performed on an metal samples according to ISO 6892-1:2019-11. The data originates from a publicly available dataset hosted on Zenodo: TBD. The semantic structure is based on the Tensile Test Ontology (TTO) version 3.0 (https://github.com/materialdigital/tensile-test-ontology), complemented by concepts from the PMD Core Ontology (PMDco)."
+      }
+    ],
+    "http://www.w3.org/2002/07/owl#imports": [
+      {
+        "@id": "https://materialdigital.github.io/application-ontologies/tto/#/"
+      }
+    ],
+    "http://www.w3.org/2002/07/owl#versionInfo": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "3.0.0"
+      }
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_width_scalar_value_specification",
+    "@type": [
+      "https://materialdigital.github.io/core-ontology/PMD_0000022"
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000039": [
+      {
+        "@id": "http://qudt.org/vocab/unit/MilliM"
+      }
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000136": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_test_piece"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0000006": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#float",
+        "@value": "13.57"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0060001": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_width_quality"
+      }
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_process",
+    "@type": [
+      "https://materialdigital.github.io/core-ontology/PMD_0000974"
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0000015": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_test_piece"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0000016": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_thickness_quality"
+      },
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_width_quality"
+      },
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_gauge_length_quality"
+      },
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_youngs_modulus_quality"
+      },
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_yield_strength_quality"
+      },
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_strain_at_fracture_quality"
+      },
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_dataset"
+      }
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_gauge_length_scalar_value_specification",
+    "@type": [
+      "https://materialdigital.github.io/core-ontology/PMD_0000022"
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000039": [
+      {
+        "@id": "http://qudt.org/vocab/unit/MilliM"
+      }
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000136": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_test_piece"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0000006": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#float",
+        "@value": "50.0"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0060001": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_gauge_length_quality"
+      }
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_dataset",
+    "@type": [
+      "http://www.w3.org/ns/csvw#Table",
+      "http://purl.obolibrary.org/obo/IAO_0000109"
+    ],
+    "http://purl.org/dc/elements/1.1/title": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "TestMetal Force Displacement Curve"
+      }
+    ],
+    "http://www.w3.org/ns/csvw#url": [
+      {
+        "@id": "https://zenodo.org/records/1234567/files/TestMetal_data.csv"
+      }
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_strain_at_fracture_value_specification",
+    "@type": [
+      "https://materialdigital.github.io/core-ontology/PMD_0000022"
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000039": [
+      {
+        "@value": "mm/mm"
+      }
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000136": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_test_piece"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0000006": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#float",
+        "@value": "0.1146"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0060001": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_strain_at_fracture_quality"
+      }
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal_youngs_modulus_scalar_value_specification",
+    "@type": [
+      "https://materialdigital.github.io/core-ontology/PMD_0000022"
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000039": [
+      {
+        "@id": "http://qudt.org/vocab/unit/MegaPa"
+      }
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000136": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_test_piece"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0000006": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#float",
+        "@value": "65291.94"
+      }
+    ],
+    "https://materialdigital.github.io/core-ontology/PMD_0060001": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_youngs_modulus_quality"
+      }
+    ]
+  },
+  {
+    "@id": "https://zenodo.org/records/19007867TestMetal",
+    "@type": [
+      "https://materialdigital.github.io/core-ontology/PMD_0000017"
+    ],
+    "http://purl.obolibrary.org/obo/IAO_0000219": [
+      {
+        "@id": "https://zenodo.org/records/19007867TestMetal_process"
+      }
+    ]
+  }
+]

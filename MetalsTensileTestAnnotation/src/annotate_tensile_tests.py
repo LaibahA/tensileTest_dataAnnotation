@@ -3,20 +3,172 @@
 
 import csv
 import os, json
+import requests
+import zipfile
+
+try:
+    import rdflib
+except ImportError:
+    raise ImportError(
+        "rdflib is required. Install it with: pip install rdflib"
+    )
 
 from rdflib import Graph, Namespace, Literal, URIRef, DC
 #Graph stores the RDF triples, Namespace is what lets us define the prefixes
 from rdflib.namespace import RDF, XSD, OWL
 #RDF is for the standard datatypes, XSD is for formatting literals
+from urllib.parse import quote
+
+try:
+    import jsonschema
+except ImportError:
+    raise ImportError(
+        "jsonschema is required. Install it with: pip install jsonschema"
+    )
+from jsonschema import validate, ValidationError
+
+api_url = "https://zenodo.org/api/records/19007867"
+data_dir = "importedData"
+zip_path = os.path.join(data_dir, "dataset.zip")
+
+def get_zenodo_file_url():
+    api_url = "https://zenodo.org/api/records/19007867"
+    response = requests.get(api_url)
+    response.raise_for_status()
+    data = response.json()
+    if not data.get("files"):
+        raise Exception("No files found in Zenodo record.")
+
+    # Look for zip file to download
+    for file in data["files"]:
+        if file["key"].endswith(".zip"):
+            print(f"Found zip file: {file['key']}")
+            return file["links"]["self"]
+
+# This function will look for the jsonFiles directory to download and extract from it
+def download_and_extract():
+    os.makedirs(data_dir, exist_ok=True)
+    # Check if already exists
+    for root, dirs, files in os.walk(data_dir):
+        if "jsonFiles" in dirs:
+            print("Dataset already available, skipping download.")
+            return
+    #Or start download process
+    print("Downloading dataset from Zenodo...")
+    file_url = get_zenodo_file_url()
+    print(f"Downloading from: {file_url}")
+    #Send HTTP get request
+    response = requests.get(file_url, stream=True)
+    #Check if successfull
+    response.raise_for_status()
+    with open(zip_path, "wb") as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            f.write(chunk)
+    print("Download complete. Extracting...")
+    #Unpack all the files into data_dir
+    with zipfile.ZipFile(zip_path, "r") as zip_ref:
+        zip_ref.extractall(data_dir)
+    print("Extraction complete.")
+
+#Run the download function
+download_and_extract()
 
 #Input and output directories
-input_dir = "../data/metals_dictionaries"
+input_dir = None
+for root, dirs, files in os.walk(data_dir):
+    if "jsonFiles" in dirs:
+        input_dir = os.path.join(root, "jsonFiles")
+        #input_dir = "../data/metals_dictionaries"
+        break
+if input_dir is None:
+    raise FileNotFoundError("Could not find 'jsonFiles' directory after extraction.")
+
 output_dir_jsonld = "../output/annotated_metals_jsonld"
 output_dir_ttl = "../output/annotated_metals_ttl"
 output_dir_csv = "../output/metals_csv_data"
 os.makedirs(output_dir_jsonld, exist_ok=True)
 os.makedirs(output_dir_ttl, exist_ok=True)
 os.makedirs(output_dir_csv, exist_ok=True)
+
+
+#JSON schema (Draft 07) to validate the data before annotating
+schema = {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "sample": {"type": "string", "minLength": 1},
+        "date": {"type": "string", "format": "date"},
+        "material": {"type": "string"},
+
+        "Geometry": {
+            "type": "object",
+            "properties": {
+                "width": {"type": "number"},
+                "thickness": {"type": "number"},
+                "gauge_length": {"type": "number"}
+            },
+            "required": ["width", "thickness", "gauge_length"]
+        },
+
+        "youngs_modulus": {
+            "type": "object",
+            "properties": {
+                "value": {"type": "number"},
+                "reference": {"type": "string"},
+                "units": {"type": "string"}
+            },
+            "required": ["value", "reference", "units"]
+        },
+
+        "yield_strength": {
+            "type": "object",
+            "properties": {
+                "value": {"type": "number"},
+                "reference": {"type": "string"},
+                "units": {"type": "string"}
+            },
+            "required": ["value", "reference", "units"]
+        },
+
+        "strain_at_fracture": {
+            "type": "object",
+            "properties": {
+                "value": {"type": "number"},
+                "reference": {"type": "string"},
+                "units": {"type": "string"}
+            },
+            "required": ["value", "reference", "units"]
+        },
+
+        "raw_data": {
+            "type": "object",
+            "properties": {
+                "load": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "minItems": 1
+                },
+                "displacement": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "minItems": 1
+                }
+            },
+            "required": ["load", "displacement"]
+        }
+    },
+
+    "required": [
+        "sample",
+        "date",
+        "material",
+        "Geometry",
+        "youngs_modulus",
+        "yield_strength",
+        "strain_at_fracture",
+        "raw_data"
+    ]
+}
 
 g = Graph()  #Empty graph to store triples
 
@@ -34,10 +186,7 @@ g.bind("obo", OBO)
 g.bind("csvw", CSVW)
 g.bind("dct", DCT)
 
-'''
-Need to update namespace below to our zenodo link for the domain
-'''
-prefix = Namespace("https://zenodo.org/records/19007867")  #This is what builds the uri for our subject to annotate.
+prefix = Namespace("https://zenodo.org/records/19007867/")  #This is what builds the uri for our subject to annotate.
 g.bind("prefix", prefix)
 
 #Create ontology using TTO as basis
@@ -57,14 +206,22 @@ for filename in os.listdir(input_dir):
 
         with open(filepath) as f:
             data = json.load(f) #Makes the list of rows
+            #Validate the data before annotating
+            try:
+                validate(instance=data, schema=schema)
+            except ValidationError as e:
+                print(f"\nValidation failed for file: {filename}")
+                print(f"Error: {e.message}")
+                continue  # Skip this file and move to next
+
 
             #First, read in all the lines and save the variables.
-            process_id = data["sample"]
+            process_id = quote(data["sample"])
             date = data["date"]
             material = data["material"]
-            width = data["Properties"]["width"]
-            thickness = data["Properties"]["thickness"]
-            gauge_length = data["Properties"]["gauge_length"]
+            width = data["Geometry"]["width"]
+            thickness = data["Geometry"]["thickness"]
+            gauge_length = data["Geometry"]["gauge_length"]
             ymVal = data["youngs_modulus"]["value"]
             ymRef = data["youngs_modulus"]["reference"]
             ymUnit = data["youngs_modulus"]["units"]
@@ -74,8 +231,8 @@ for filename in os.listdir(input_dir):
             safVal = data["strain_at_fracture"]["value"]
             safRef = data["strain_at_fracture"]["reference"]
             safUnit = data["strain_at_fracture"]["units"]
-            forces = data["raw_data"]["force"]
-            elongations = data["raw_data"]["elongation"]
+            forces = data["raw_data"]["load"]
+            elongations = data["raw_data"]["displacement"]
 
             #Make uris
             #experimentIRI is prefix + sample name
@@ -183,13 +340,11 @@ for filename in os.listdir(input_dir):
             g.add((processIRI, PMD.PMD_0000016, datasetIRI)) #processIRI has output dataset datasetIRI
             g.add((datasetIRI, RDF.type, CSVW.Table)) # is a table
             csv_name = process_id + "_data.csv"
-            g.add((datasetIRI, CSVW.url, URIRef(f"https://zenodo.org/records/1234567/files/{csv_name}")))
-            #g.add((datasetIRI, CSVW.url, URIRef(https://zenodo.org/records/19007867/files/{csv_name}")))
+            g.add((datasetIRI, CSVW.url, URIRef(f"https://zenodo.org/records/19007867/files/{csv_name}")))
+            #g.add((datasetIRI, CSVW.url, URIRef(https://zenodo.org/records/12345678/files/{csv_name}")))
             g.add((datasetIRI, RDF.type, OBO.IAO_0000109)) # is a measurement datum
             g.add((datasetIRI, DC.title,
                    Literal(process_id + " Force Displacement Curve", datatype=XSD.string)))
-
-
 
 #Serializing in jsonld and ttl
 g.serialize(os.path.join(output_dir_jsonld, "annotated_all_tests.jsonld"), format="json-ld")

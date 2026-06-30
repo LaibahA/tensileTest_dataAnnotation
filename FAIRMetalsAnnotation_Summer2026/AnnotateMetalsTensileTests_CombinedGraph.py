@@ -385,8 +385,8 @@ for filename in os.listdir(input_dir):
             csv_name = process_id + "_data.csv"
             g.add((datasetIRI, CSVW.url, URIRef(f"https://zenodo.org/records/19007867/files/{csv_name}")))
             g.add((datasetIRI, RDF.type, OBO.IAO_0000109)) # is a measurement datum
-            g.add((datasetIRI, DC.title, Literal(process_id + "Force Elongation Curve", datatype=XSD.string)))
-            #Make a schema to connect the columns to
+            g.add((datasetIRI, DC.title, Literal(process_id + " Force Elongation Curve", datatype=XSD.string)))
+            #Define a CSVW table schema describing the columns.
             schemaIRI = URIRef(experimentIRI + "_table_schema")
             g.add((datasetIRI, CSVW.tableSchema, schemaIRI))
             g.add((schemaIRI, RDF.type, CSVW.Schema))
@@ -396,8 +396,7 @@ for filename in os.listdir(input_dir):
             g.add((forceColumnIRI, RDF.type, CSVW.Column))  # is a column
             g.add((forceColumnIRI, CSVW.name, Literal("Force(N)")))
             g.add((forceColumnIRI, OBO.IAO_0000039, QUDT.N))  # has unit N
-            g.add((forceColumnIRI, CSVW.propertyUrl,
-                   PMD.PMD_0020200))  # Every value in the column corresponds to Force from PMD
+            g.add((forceColumnIRI, CSVW.propertyUrl, PMD.PMD_0020200))  # Every value in the column corresponds to Force from PMD
             # Column 2: Elongation
             elongationColumnIRI = URIRef(experimentIRI + "_elongation_column")
             g.add((schemaIRI, CSVW.column, elongationColumnIRI))

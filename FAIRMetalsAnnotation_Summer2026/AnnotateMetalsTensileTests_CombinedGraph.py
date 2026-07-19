@@ -295,7 +295,7 @@ for filename in os.listdir(input_dir):
             g.add((thicknessIRI_scalar_value, RDF.type, OBO.OBI_0001931))  # is a scalar value specification
             g.add((thicknessIRI_scalar_value, PMD.PMD_0000006, Literal(thickness, datatype=XSD.float)))  # has value literal
             g.add((thicknessIRI_scalar_value, OBO.IAO_0000039, QUDT.MilliM))  # has unit MilliM
-            g.add((thicknessIRI_scalar_value, OBO.OBI_0001927, thicknessIRI_quality))  # Scalar value specifies value of quality thickness
+            g.add((thicknessIRI_quality, PMD.PMD_0000077, thicknessIRI_scalar_value))  # Quality of thickness specified by thickness scalar value specification
             g.add((thicknessIRI_scalar_value, OBO.IAO_0000136, testPieceIRI))  # is about test piece
 
             # Maps to Original Width from TTO
@@ -309,7 +309,7 @@ for filename in os.listdir(input_dir):
             g.add((widthIRI_scalar_value, RDF.type, OBO.OBI_0001931))  # is a scalar value specification
             g.add((widthIRI_scalar_value, PMD.PMD_0000006, Literal(width, datatype=XSD.float)))  # has value literal
             g.add((widthIRI_scalar_value, OBO.IAO_0000039, QUDT.MilliM))  # has unit mm
-            g.add((widthIRI_scalar_value, OBO.OBI_0001927, widthIRI_quality))  # Scalar value specifies value of quality width
+            g.add((widthIRI_quality, PMD.PMD_0000077, widthIRI_scalar_value))  # Quality of width specified by width scalar value specification
             g.add((widthIRI_scalar_value, OBO.IAO_0000136, testPieceIRI))  # is about test piece
 
             # Maps to Original Gauge Length from TTO
@@ -323,7 +323,7 @@ for filename in os.listdir(input_dir):
             g.add((lengthIRI_scalar_value, RDF.type, OBO.OBI_0001931))  # is a scalar value specification
             g.add((lengthIRI_scalar_value, PMD.PMD_0000006, Literal(gauge_length, datatype=XSD.float)))  # has value literal
             g.add((lengthIRI_scalar_value, OBO.IAO_0000039, QUDT.MilliM))  # has unit MilliM
-            g.add((lengthIRI_scalar_value, OBO.OBI_0001927, lengthIRI_quality))  # Scalar value specifies value of quality length
+            g.add((lengthIRI_quality, PMD.PMD_0000077, lengthIRI_scalar_value))  # Quality of length specified by length scalar value specification
             g.add((lengthIRI_scalar_value, OBO.IAO_0000136, testPieceIRI))  # is about test piece
 
             # Maps to Elastic Modulus from PMD
@@ -337,7 +337,7 @@ for filename in os.listdir(input_dir):
             g.add((ymIRI_scalar_value, RDF.type, OBO.OBI_0001931))  # is a scalar value specification
             g.add((ymIRI_scalar_value, PMD.PMD_0000006, Literal(ymVal, datatype=XSD.float)))  # has value literal
             g.add((ymIRI_scalar_value, OBO.IAO_0000039, QUDT.MegaPa))  # has unit MegaPa
-            g.add((ymIRI_scalar_value, OBO.OBI_0001927, ymIRI_quality))  # Scalar value specifies value of quality elastic modulus
+            g.add((ymIRI_quality, PMD.PMD_0000077,ymIRI_scalar_value))  # Quality of elastic modulus specified by elastic modulus value specification
             g.add((ymIRI_scalar_value, OBO.IAO_0000136, testPieceIRI))  # is about test piece
 
             # Maps to Force at proof strength plastic extension f02 from TTO
@@ -351,7 +351,7 @@ for filename in os.listdir(input_dir):
             g.add((ysIRI_scalar_value, RDF.type, OBO.OBI_0001931))  # is a scalar value specification
             g.add((ysIRI_scalar_value, PMD.PMD_0000006, Literal(ysVal, datatype=XSD.float)))  # has value literal
             g.add((ysIRI_scalar_value, OBO.IAO_0000039, QUDT.MegaPa))  # has unit MegaPa
-            g.add((ysIRI_scalar_value, OBO.OBI_0001927, ysIRI_quality))  # Scalar value specifies value of quality Force at proof strength plastic extension f02
+            g.add((ysIRI_quality, PMD.PMD_0000077, ysIRI_scalar_value))  # Quality specified by value specification
             g.add((ysIRI_scalar_value, OBO.IAO_0000136, testPieceIRI))  # is about test piece
 
             # Maps to Percentage Total Extension at Fracture from TTO
@@ -365,7 +365,7 @@ for filename in os.listdir(input_dir):
             g.add((safIRI_scalar_value, RDF.type, OBO.OBI_0001931))  # is a scalar value specification
             g.add((safIRI_scalar_value, PMD.PMD_0000006, Literal(safVal, datatype=XSD.float)))  # has value literal
             g.add((safIRI_scalar_value, OBO.IAO_0000039, Literal(safUnit)))  # has unit mm/mm
-            g.add((safIRI_scalar_value, OBO.OBI_0001927, safIRI_quality))  # Scalar value specifies value of quality strain at fracture
+            g.add((safIRI_quality, PMD.PMD_0000077, safIRI_scalar_value))  # Quality specified by value specification
             g.add((safIRI_scalar_value, OBO.IAO_0000136, testPieceIRI))  # is about test piece
 
             #Create CSV files for each of the JSON input files to represent the Force and Elongation pairs

@@ -1,0 +1,49 @@
+{
+    "date": "2025-10-1",
+    "sample": "Sample Input",
+    "material": "Crosshead",
+    "units": {
+        "width": "mm",
+        "thickness": "mm",
+        "elongation": "mm",
+        "force": "N",
+        "strain": "mm/mm",
+        "stress": "MPa"
+    },
+    "Geometry": {
+        "width": 13.54,
+        "thickness": 3.15,
+        "gauge_length": 50.0
+    },
+    "raw_data": {
+        "displacement": [
+            -4.5076951948885835e-05,
+            -3.7488653958916984e-05,
+            6.453916512327851e-05,
+            9.465146888487652e-05,
+            -2.243222496645103e-05
+        ],
+        "load": [
+            -0.2827690541744232,
+            -6.269662857055664,
+            -6.8461480140686035,
+            -2.5180535316467285,
+            -6.9750895500183105
+        ]
+    },
+    "youngs_modulus": {
+        "value": 76443.93,
+        "units": "MPa",
+        "reference": "ASTM D638-22: A2.4 Modulus of Elasticity"
+    },
+    "yield_strength": {
+        "value": 253.19,
+        "units": "MPa",
+        "reference": "ASTM D638-22: A2.6 Offset Yield Strength"
+    },
+    "strain_at_fracture": {
+        "value": 0.14,
+        "units": "mm/mm",
+        "reference": "ASTM D638-22: A2.24 and A2.25"
+    }
+}

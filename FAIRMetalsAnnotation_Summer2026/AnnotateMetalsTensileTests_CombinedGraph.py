@@ -315,7 +315,7 @@ for filename in os.listdir(input_dir):
             # Maps to Original Gauge Length from TTO
             # Gauge length quality
             lengthIRI_quality = URIRef(experimentIRI + "_gauge_length_quality")
-            g.add((lengthIRI_quality, RDF.type, TTO.TTO_0000028))  # is an original gauge length
+            g.add((lengthIRI_quality, RDF.type, TTO.TTO_0000020))  # is an original gauge length
             g.add((processIRI, OBO.RO_0002234, lengthIRI_quality))  # processIRI has output quality length
             g.add((testPieceIRI, PMD.PMD_0025998, lengthIRI_quality))  # Test piece has relational quality gauge length
             # Gauge length specification
